@@ -1,0 +1,125 @@
+<html>
+<head>
+   <title>Analog Clock</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .clock {
+      width: 300px;
+      height: 300px;
+      border: 6px solid white;
+      border-radius: 50%;
+      position: relative;
+      background: black;
+    }
+
+    .number {
+      position: absolute;
+      color: white;
+      font-size: 1rem;
+      font-family: sans-serif;
+      transform: translate(-50%, -50%);
+    }
+
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      transform: rotate(90deg);
+      background: white;
+      border-radius: 6px;
+    }
+
+    .hour {
+      width: 6px;
+      height: 70px;
+      background: orange;
+      z-index: 3;
+    }
+
+    .minute {
+      width: 4px;
+      height: 100px;
+      background: skyblue;
+      z-index: 2;
+    }
+
+    .second {
+      width: 2px;
+      height: 110px;
+      background: red;
+      z-index: 1;
+    }
+
+    .center-dot {
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 4;
+    }
+  </style>
+</head>
+<body>
+  <div class="clock" id="clock">
+    <div class="hand hour" id="hour-hand"></div>
+    <div class="hand minute" id="minute-hand"></div>
+    <div class="hand second" id="second-hand"></div>
+
+    <div class="center-dot"></div>
+  </div>
+
+  <script>
+    const clock = document.getElementById("clock");
+    const radius = 140;     const centerX = 150;
+    const centerY = 150;
+
+    for (let i = 1; i <= 12; i++) {
+      const angle = (i * 30 - 90) * (Math.PI / 180); 
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+
+      const number = document.createElement("div");
+      number.className = "number";
+      number.style.left = `${x}px`;
+      number.style.top = `${y}px`;
+      number.textContent = i;
+      clock.appendChild(number);
+    }
+    const hourHand = document.getElementById('hour-hand');
+    const minuteHand = document.getElementById('minute-hand');
+    const secondHand = document.getElementById('second-hand');
+
+    function updateClock() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours();
+
+      const secondDeg = seconds * 6;
+      const minuteDeg = minutes * 6 + seconds * 0.1;
+      const hourDeg = ((hours % 12) / 12) * 360 + (minutes / 60) * 30;
+
+      secondHand.style.transform = `rotate(${secondDeg}deg)`;
+      minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+      hourHand.style.transform = `rotate(${hourDeg}deg)`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
+
